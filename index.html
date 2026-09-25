@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leeds Credit Union – Opening Status</title>
+<style>
+  :root {
+    --navy: #003b5c;
+    --navy-dark: #002b43;
+    --orange: #f28c28;
+    --orange-dark: #d97706;
+    --bg: #f4f5f6;
+    --card: #ffffff;
+    --text: #17202a;
+    --muted: #5d6870;
+    --border: #d8dde1;
+    --green: #15803d;
+    --green-bg: #eaf7ef;
+    --amber: #c75b00;
+    --amber-bg: #fff2e5;
+    --grey: #667085;
+    --grey-bg: #eef0f2;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.45;
+  }
+
+  /* Leeds-style three-band header */
+  .header {
+    color: white;
+  }
+
+  .header-top,
+  .header-bottom {
+    background: var(--navy);
+    min-height: 22px;
+  }
+
+  .header-main {
+    background: var(--orange);
+    padding: 18px 20px 20px;
+  }
+
+  .brand {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .brand-small {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    opacity: .95;
+  }
+
+  .brand h1 {
+    margin: 4px 0 0;
+    font-size: 25px;
+    line-height: 1.15;
+    font-weight: 700;
+  }
+
+  .header-bottom {
+    height: 8px;
+    min-height: 8px;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px 42px;
+  }
+
+  .intro h2 {
+    margin: 0 0 5px;
+    font-size: 22px;
+  }
+
+  .intro p {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  .branch-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  .branch {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+
+  .branch-summary {
+    padding: 17px 16px 15px;
+  }
+
+  .branch-name {
+    margin: 0;
+    font-size: 19px;
+  }
+
+  .address {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .status-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    flex: 0 0 13px;
+  }
+
+  .status-dot.open { background: var(--green); }
+  .status-dot.closing { background: var(--orange); }
+  .status-dot.closed { background: var(--grey); }
+
+  .status-text {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .status-text.open { color: var(--green); }
+  .status-text.closing { color: var(--amber); }
+  .status-text.closed { color: var(--grey); }
+
+  .today-note {
+    margin: 3px 0 0 22px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .toggle {
+    width: 100%;
+    border: 0;
+    border-top: 1px solid var(--border);
+    background: #fafbfc;
+    color: var(--navy);
+    padding: 12px 16px;
+    text-align: left;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .toggle:hover,
+  .toggle:focus-visible {
+    background: #f1f5f7;
+  }
+
+  .chevron {
+    font-size: 18px;
+    transition: transform .15s ease;
+  }
+
+  .branch.expanded .chevron {
+    transform: rotate(180deg);
+  }
+
+  .hours {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 4px 16px 13px;
+  }
+
+  .branch.expanded .hours {
+    display: block;
+  }
+
+  .hours-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid #edf0f2;
+    font-size: 14px;
+  }
+
+  .hours-row:last-child { border-bottom: 0; }
+
+  .hours-row.today {
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .closed-hours {
+    color: var(--muted);
+  }
+
+  .updated {
+    margin-top: 22px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  @media (min-width: 650px) {
+    .header-main { padding-left: 24px; padding-right: 24px; }
+    main { padding-left: 24px; padding-right: 24px; }
+    .branch-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .branch:last-child { grid-column: 1 / -1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chevron { transition: none; }
+  }
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-top"></div>
+  <div class="header-main">
+    <div class="brand">
+      <div class="brand-small">Leeds Credit Union</div>
+      <h1>Branch opening status</h1>
+    </div>
+  </div>
+  <div class="header-bottom"></div>
+</header>
+
+<main>
+  <section class="intro" aria-labelledby="page-title">
+    <h2 id="page-title">Branch opening times</h2>
+    <p>Check the current opening status and weekly opening hours.</p>
+  </section>
+
+  <section id="branches" class="branch-list" aria-label="Leeds Credit Union branches"></section>
+
+  <div class="updated" id="updated" aria-live="polite"></div>
+</main>
+
+<script>
+const branches = [
+  {
+    id: "merrion",
+    name: "Merrion House",
+    address: "110 Merrion Centre, Leeds, LS2 8LX",
+    hours: {
+      1: ["09:00", "16:00"],
+      2: ["09:00", "16:00"],
+      3: null,
+      4: ["09:00", "16:00"],
+      5: ["09:00", "16:00"],
+      6: null,
+      0: null
+    }
+  },
+  {
+    id: "armley",
+    name: "Armley",
+    address: "Armley One Stop Centre, Stocks Hill, Leeds, LS12 1UQ",
+    hours: {
+      1: null,
+      2: ["09:00", "15:00"],
+      3: ["09:00", "15:00"],
+      4: null,
+      5: ["09:00", "15:00"],
+      6: null,
+      0: null
+    }
+  },
+  {
+    id: "dewsbury",
+    name: "Dewsbury Road",
+    address: "Dewsbury Road One Stop Centre, 190 Dewsbury Road, Beeston, Leeds LS11 6PF",
+    hours: {
+      1: ["09:00", "15:00"],
+      2: null,
+      3: ["09:00", "15:00"],
+      4: ["09:00", "15:00"],
+      5: null,
+      6: null,
+      0: null
+    }
+  }
+];
+
+const days = [
+  [1, "Monday"], [2, "Tuesday"], [3, "Wednesday"],
+  [4, "Thursday"], [5, "Friday"], [6, "Saturday"], [0, "Sunday"]
+];
+
+const expanded = new Set();
+
+function minutesSinceMidnight(date) {
+  return date.getHours() * 60 + date.getMinutes() + date.getSeconds() / 60;
+}
+
+function formatTime(t) {
+  const [h, m] = t.split(":").map(Number);
+  const suffix = h >= 12 ? "pm" : "am";
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, "0")}${suffix}`;
+}
+
+function statusFor(branch, now) {
+  const day = now.getDay();
+  const hours = branch.hours[day];
+  if (!hours) {
+    return { type: "closed", label: "Close", note: "Closed today" };
+  }
+
+  const [open, close] = hours;
+  const [oh, om] = open.split(":").map(Number);
+  const [ch, cm] = close.split(":").map(Number);
+  const current = minutesSinceMidnight(now);
+  const opening = oh * 60 + om;
+  const closing = ch * 60 + cm;
+  const remaining = closing - current;
+
+  if (current < opening || current >= closing) {
+    return { type: "closed", label: "Close", note: current < opening ? `Opens at ${formatTime(open)}` : `Closed since ${formatTime(close)}` };
+  }
+
+  if (remaining < 60) {
+    return { type: "closing", label: `Closing in ${Math.max(1, Math.ceil(remaining))} mins`, note: `Closes at ${formatTime(close)}` };
+  }
+
+  return { type: "open", label: "Opening", note: `Closes at ${formatTime(close)}` };
+}
+
+function render() {
+  const now = new Date();
+  const container = document.getElementById("branches");
+
+  container.innerHTML = branches.map(branch => {
+    const s = statusFor(branch, now);
+    const isExpanded = expanded.has(branch.id);
+
+    const rows = days.map(([day, name]) => {
+      const h = branch.hours[day];
+      const isToday = now.getDay() === day;
+      return `
+        <div class="hours-row ${isToday ? "today" : ""}">
+          <span>${name}${isToday ? " · Today" : ""}</span>
+          <span class="${h ? "" : "closed-hours"}">${h ? `${formatTime(h[0])} – ${formatTime(h[1])}` : "Closed"}</span>
+        </div>`;
+    }).join("");
+
+    return `
+      <article class="branch ${isExpanded ? "expanded" : ""}" data-id="${branch.id}">
+        <div class="branch-summary">
+          <h3 class="branch-name">${branch.name}</h3>
+          <div class="address">${branch.address}</div>
+
+          <div class="status-row" aria-label="${s.label}">
+            <span class="status-dot ${s.type}" aria-hidden="true"></span>
+            <span class="status-text ${s.type}">${s.label}</span>
+          </div>
+          <div class="today-note">${s.note}</div>
+        </div>
+
+        <button class="toggle" type="button"
+          aria-expanded="${isExpanded}"
+          aria-controls="hours-${branch.id}"
+          onclick="toggleBranch('${branch.id}')">
+          <span>${isExpanded ? "Collapse opening hours" : "View opening hours"}</span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </button>
+
+        <div class="hours" id="hours-${branch.id}">
+          ${rows}
+        </div>
+      </article>`;
+  }).join("");
+
+  document.getElementById("updated").textContent =
+    `Status checked ${now.toLocaleTimeString("en-GB", {hour: "2-digit", minute: "2-digit"})} UK time`;
+}
+
+function toggleBranch(id) {
+  if (expanded.has(id)) expanded.delete(id);
+  else expanded.add(id);
+  render();
+}
+
+render();
+// Recalculate frequently enough that the status changes at the correct minute.
+// Expanded/collapsed state is kept in the Set, so automatic refresh never collapses a card.
+setInterval(render, 15000);
+</script>
+</body>
+</html>

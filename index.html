@@ -45,7 +45,7 @@
   }
 
   .header-main {
-    background: var(--orange);
+    background: var(--navy);
     padding: 18px 20px 20px;
   }
 
@@ -54,18 +54,10 @@
     margin: 0 auto;
   }
 
-  .brand-small {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    opacity: .95;
-  }
-
   .brand h1 {
-    margin: 4px 0 0;
-    font-size: 25px;
-    line-height: 1.15;
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.2;
     font-weight: 700;
   }
 
@@ -237,14 +229,11 @@
 </head>
 <body>
 <header class="header">
-  <div class="header-top"></div>
   <div class="header-main">
     <div class="brand">
-      <div class="brand-small"></div>
       <h1>Leeds Credit Union</h1>
     </div>
   </div>
-  <div class="header-bottom"></div>
 </header>
 
 <main>
@@ -266,7 +255,7 @@ const branches = [
     address: "110 Merrion Centre, Leeds, LS2 8LX",
     hours: {
       1: ["09:00", "16:00"],
-      2: ["10:00", "16:00"],
+      2: ["09:00", "16:00"],
       3: null,
       4: ["09:00", "16:00"],
       5: ["09:00", "16:00"],
@@ -280,7 +269,7 @@ const branches = [
     address: "Armley One Stop Centre, Stocks Hill, Leeds, LS12 1UQ",
     hours: {
       1: null,
-      2: ["10:00", "15:00"],
+      2: ["09:00", "15:00"],
       3: ["09:00", "15:00"],
       4: null,
       5: ["09:00", "15:00"],
@@ -384,7 +373,7 @@ function render() {
           aria-expanded="${isExpanded}"
           aria-controls="hours-${branch.id}"
           onclick="toggleBranch('${branch.id}')">
-          <span>${isExpanded ? "Hide opening hours" : "View opening hours"}</span>
+          <span>${isExpanded ? "Collapse opening hours" : "View opening hours"}</span>
           <span class="chevron" aria-hidden="true">⌄</span>
         </button>
 
